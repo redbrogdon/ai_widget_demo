@@ -1,0 +1,10 @@
+file: lib/main.dart
+line: 124
+---
+        response = await chat.sendMessage(
+          Content.functionResponse(functionCall.name, {
+            'poemName': functionResult,
+          }),
+        );
+
+        processResponse(response);

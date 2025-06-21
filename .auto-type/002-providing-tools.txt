@@ -1,0 +1,9 @@
+file: lib/main.dart
+line: 77
+---
+
+↑      tools: [
+        Tool.functionDeclarations([
+          pickAPoem,
+        ]),
+      ],

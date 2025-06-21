@@ -1,0 +1,16 @@
+file: lib/main.dart
+line: 128
+---
+              Text('Which of these poems was written by $poetName?'),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(a),
+                child: Text(a),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(b),
+                child: Text(b),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(c),
+                child: Text(c),
+              ),

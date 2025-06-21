@@ -1,0 +1,10 @@
+file: lib/main.dart
+line: 110
+---
+
+
+↑    for (final functionCall in response.functionCalls) {
+      if (functionCall.name == 'pickAPoem') {
+
+      }
+    }

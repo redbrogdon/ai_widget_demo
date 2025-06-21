@@ -1,0 +1,18 @@
+file: lib/main.dart
+line: 6
+---
+
+
+↑final pickAPoem = FunctionDeclaration(
+  'pickAPoem',
+  'Use this to ask me to pick one poem from a list of three',
+  parameters: {
+    'poetName': Schema.string(description: 'Name of the chosen poet'),
+    'poemList': Schema.array(
+      description: 'A list of three poems from which the user can select',
+      maxItems: 3,
+      minItems: 3,
+      items: Schema.string(description: 'The name of a single poem'),
+    ),
+  },  
+);
