@@ -4,6 +4,20 @@ import 'firebase_options.dart';
 
 import 'package:flutter/material.dart';
 
+final pickAPoem = FunctionDeclaration(
+  'pickAPoem',
+  'Use this to ask me to pick one poem from a list of three',
+  parameters: {
+    'poetName': Schema.string(description: 'Name of the chosen poet'),
+    'poemList': Schema.array(
+      description: 'A list of three poems from which the user can select',
+      maxItems: 3,
+      minItems: 3,
+      items: Schema.string(description: 'The name of a single poem'),
+    ),
+  },
+);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -60,6 +74,11 @@ class _MyHomePageState extends State<MyHomePage> {
         After each round, don't wait for me to say I want to continue. Just
         start a new round.
       '''),
+      tools: [
+        Tool.functionDeclarations([
+          pickAPoem,
+        ]),
+      ],
     );
 
     chat = model.startChat();
@@ -88,6 +107,66 @@ class _MyHomePageState extends State<MyHomePage> {
     if (response.text != null) {
       setState(() => chatHistory = '$chatHistory${response.text}\n\n');
     }
+
+    for (final functionCall in response.functionCalls) {
+      if (functionCall.name == 'pickAPoem') {
+        final poemList = functionCall.args['poemList'] as List<dynamic>;
+        final poetName = functionCall.args['poetName'] as String;
+
+        final functionResult = await getPoemChoice(
+          context,
+          poetName,
+          poemList[0] as String,
+          poemList[1] as String,
+          poemList[2] as String,
+        );
+
+        response = await chat.sendMessage(
+          Content.functionResponse(functionCall.name, {
+            'poemName': functionResult,
+          }),
+        );
+
+        processResponse(response);
+      }
+    }
+  }
+
+  Future<String> getPoemChoice(
+    BuildContext context,
+    String poetName,
+    String a,
+    String b,
+    String c,
+  ) async {
+    final String? chosenPoem = await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Pick a Poem'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Which of these poems was written by $poetName?'),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(a),
+                child: Text(a),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(b),
+                child: Text(b),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(c),
+                child: Text(c),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    return chosenPoem ?? '';
   }
 
   @override
