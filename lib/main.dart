@@ -176,45 +176,43 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: SafeArea(
-        child: SizedBox.expand(
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 100),
-                  child: Text(chatHistory),
+      body: SizedBox.expand(
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 100),
+                child: Text(chatHistory),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(32.0),
+                color: Theme.of(context).colorScheme.inversePrimary,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: textController,
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final text = textController.text;
+                        textController.clear();
+                        await sendMessage(text);
+                      },
+                      child: Text('Clicky'),
+                    ),
+                  ],
                 ),
               ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  color: Theme.of(context).colorScheme.inversePrimary,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: textController,
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final text = textController.text;
-                          textController.clear();
-                          await sendMessage(text);
-                        },
-                        child: Text('Clicky'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
